@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drona AI - Loading</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Loading Animation Container -->
+    <div id="loading-screen">
+        <canvas id="container" width="200" height="200"></canvas>
+        <h1 class="logo-text">Drona AI</h1>
+    </div>
+
+    <!-- Main Content (hidden initially) -->
+    <div id="main-content" style="display: none;">
+        <h1>Welcome to Drona AI</h1>
+        <p>Your sports dashboard is ready!</p>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script>
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.getElementById('loading-screen').classList.add('fade-out');
+                setTimeout(() => {
+                    document.getElementById('loading-screen').style.display = 'none';
+                    document.getElementById('main-content').style.display = 'block';
+                    // Redirect to login page after loading
+                    window.location.href = '{{ url_for("login") }}';
+                }, 500); // Matches CSS transition duration
+            }, 3000); // 3 seconds to show the animation
+        });
+    </script>
+</body>
+</html>

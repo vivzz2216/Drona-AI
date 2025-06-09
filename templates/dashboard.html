@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard - Drona AI</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-color: #f8fafc;
+      --text-color: #1e293b;
+      --accent-color: #2563eb;
+      --card-bg: #ffffff;
+      --hover-bg: rgba(37, 99, 235, 0.05);
+      --shadow-color: rgba(0, 0, 0, 0.1);
+      --icon-color: #64748b;
+      --border-color: #e2e8f0;
+      --success-color: #10b981;
+      --warning-color: #f59e0b;
+      --danger-color: #ef4444;
+    }
+
+    [data-theme="dark"] {
+      --bg-color: #0f172a;
+      --text-color: #f1f5f9;
+      --accent-color: #3b82f6;
+      --card-bg: #1e293b;
+      --hover-bg: rgba(59, 130, 246, 0.1);
+      --shadow-color: rgba(0, 0, 0, 0.3);
+      --icon-color: #94a3b8;
+      --border-color: #334155;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Inter", sans-serif;
+      background: var(--bg-color);
+      color: var(--text-color);
+      min-height: 100vh;
+      transition: all 0.3s ease;
+    }
+
+    /* Top Bar */
+    .top-bar {
+      background: var(--card-bg);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 1px 3px var(--shadow-color);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent-color);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logo i {
+      font-size: 1.8rem;
+    }
+
+    .sport-dropdown .dropdown-toggle {
+      background: var(--card-bg);
+      color: var(--text-color);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 0.5rem 1rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .sport-dropdown .dropdown-toggle:hover {
+      background: var(--hover-bg);
+      border-color: var(--accent-color);
+    }
+
+    .sport-dropdown .dropdown-menu {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      box-shadow: 0 4px 6px var(--shadow-color);
+      padding: 0.5rem;
+    }
+
+    .sport-dropdown .dropdown-item {
+      color: var(--text-color);
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .sport-dropdown .dropdown-item:hover {
+      background: var(--hover-bg);
+      color: var(--accent-color);
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .theme-toggle {
+      cursor: pointer;
+      padding: 0.5rem;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      color: var(--icon-color);
+      transition: all 0.2s ease;
+    }
+
+    .theme-toggle:hover {
+      background: var(--hover-bg);
+      color: var(--accent-color);
+    }
+
+    /* Sidebar */
+    .sidebar {
+      background: var(--card-bg);
+      width: 240px;
+      height: calc(100vh - 64px);
+      position: fixed;
+      top: 64px;
+      left: 0;
+      padding: 1.5rem;
+      border-right: 1px solid var(--border-color);
+      transition: all 0.3s ease;
+    }
+
+    .nav-item {
+      margin-bottom: 0.5rem;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      color: var(--text-color);
+      border-radius: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .nav-link:hover {
+      background: var(--hover-bg);
+      color: var(--accent-color);
+    }
+
+    .nav-link.active {
+      background: var(--accent-color);
+      color: white;
+    }
+
+    .nav-link i {
+      font-size: 1.2rem;
+    }
+
+    /* Main Content */
+    .main-content {
+      margin-left: 240px;
+      padding: 2rem;
+      transition: all 0.3s ease;
+    }
+
+    .content-header {
+      margin-bottom: 2rem;
+    }
+
+    .content-header h1 {
+      font-size: 1.875rem;
+      font-weight: 600;
+      color: var(--text-color);
+      margin-bottom: 0.5rem;
+    }
+
+    .content-header p {
+      color: var(--icon-color);
+      margin: 0;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 6px var(--shadow-color);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-color);
+      margin: 0;
+    }
+
+    .card-icon {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--hover-bg);
+      border-radius: 8px;
+      color: var(--accent-color);
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+
+    .stat-card .stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent-color);
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-card .stat-label {
+      color: var(--icon-color);
+      font-size: 0.875rem;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1024px) {
+      .sidebar {
+        width: 80px;
+        padding: 1rem 0.5rem;
+      }
+
+      .nav-link span {
+        display: none;
+      }
+
+      .main-content {
+        margin-left: 80px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        display: none;
+      }
+
+      .main-content {
+        margin-left: 0;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Leagues Section Styles */
+    .leagues-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .league-card {
+      display: flex;
+      align-items: center;
+      padding: 1rem;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      text-decoration: none;
+      color: var(--text-color);
+      transition: all 0.3s ease;
+    }
+
+    .league-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 6px var(--shadow-color);
+      border-color: var(--accent-color);
+    }
+
+    .league-logo {
+      width: 60px;
+      height: 60px;
+      margin-right: 1rem;
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--hover-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .league-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 0.5rem;
+    }
+
+    .league-info {
+      flex: 1;
+    }
+
+    .league-info h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin: 0 0 0.25rem 0;
+      color: var(--text-color);
+    }
+
+    .league-level {
+      font-size: 0.875rem;
+      color: var(--icon-color);
+      display: block;
+    }
+
+    @media (max-width: 768px) {
+      .leagues-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="logo">
+      <i class="bi bi-robot"></i>
+      <span>Drona AI</span>
+    </div>
+    <div class="controls">
+      <button class="theme-toggle" onclick="toggleTheme()">
+        <i class="bi bi-moon-stars"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <nav>
+      <div class="nav-item">
+        <a href="{{ url_for('dashboard') }}" class="nav-link active">
+          <i class="bi bi-house"></i>
+          <span>Dashboard</span>
+        </a>
+      </div>
+      <div class="nav-item">
+        <a href="{{ url_for('isl_analytics') }}" class="nav-link">
+          <i class="bi bi-graph-up"></i>
+          <span>Analytics</span>
+        </a>
+      </div>
+      <div class="nav-item">
+        <a href="{{ url_for('isl_rank') }}" class="nav-link">
+          <i class="bi bi-trophy"></i>
+          <span>Rankings</span>
+        </a>
+      </div>
+      <div class="nav-item">
+        <a href="{{ url_for('compare') }}" class="nav-link">
+          <i class="bi bi-people"></i>
+          <span>Compare Players</span>
+        </a>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="content-header">
+      <h1>Welcome back, {{ current_user.username }}</h1>
+      <p>Here's what's happening with your sports analytics today.</p>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value">2,847</div>
+        <div class="stat-label">Total Players</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">156</div>
+        <div class="stat-label">Active Tournaments</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">89%</div>
+        <div class="stat-label">Prediction Accuracy</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">12</div>
+        <div class="stat-label">New Reports</div>
+      </div>
+    </div>
+
+    <!-- Football Leagues Section -->
+    <div class="leagues-section">
+      <div class="card mb-4">
+        <div class="card-header">
+          <h3 class="card-title">National Leagues</h3>
+          <div class="card-icon">
+            <i class="bi bi-trophy"></i>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="leagues-grid">
+            {% for tournament in football_content.tournaments if tournament.Level == 'National' %}
+            <a href="{% if tournament.Tournament == 'Indian Super League (ISL)' %}{{ url_for('isl') }}{% else %}#{% endif %}" class="league-card">
+              <div class="league-logo">
+                <img src="{{ tournament.Logo }}" alt="{{ tournament.Tournament }} Logo">
+              </div>
+              <div class="league-info">
+                <h4>{{ tournament.Tournament }}</h4>
+                <span class="league-level">{{ tournament.Level }}</span>
+              </div>
+            </a>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Regional Leagues</h3>
+          <div class="card-icon">
+            <i class="bi bi-geo-alt"></i>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="leagues-grid">
+            {% for tournament in football_content.tournaments if tournament.Level == 'Regional' %}
+            <a href="#" class="league-card">
+              <div class="league-logo">
+                <img src="{{ tournament.Logo }}" alt="{{ tournament.Tournament }} Logo">
+              </div>
+              <div class="league-info">
+                <h4>{{ tournament.Tournament }}</h4>
+                <span class="league-level">{{ tournament.Level }}</span>
+              </div>
+            </a>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    function toggleTheme() {
+      const body = document.body;
+      const currentTheme = body.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      body.setAttribute('data-theme', newTheme);
+      
+      const themeIcon = document.querySelector('.theme-toggle i');
+      themeIcon.className = newTheme === 'dark' ? 'bi bi-sun' : 'bi bi-moon-stars';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Football Heatmap (D3.js)</title>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <style>
+        body {
+            background-color: #121212;
+            text-align: center;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        canvas {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 2px solid white;
+        }
+        button {
+            margin: 10px;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<h1>⚽ Football Player Heatmap</h1>
+
+<canvas id="heatmapCanvas" width="800" height="500"></canvas>
+
+<div>
+    <button onclick="updateHeatmap('Goalkeeper')">Goalkeeper</button>
+    <button onclick="updateHeatmap('Defender')">Defender</button>
+    <button onclick="updateHeatmap('Midfielder')">Midfielder</button>
+    <button onclick="updateHeatmap('Forward')">Forward</button>
+</div>
+
+<script>
+    const canvas = document.getElementById("heatmapCanvas");
+    const ctx = canvas.getContext("2d");
+    const width = canvas.width, height = canvas.height;
+
+    function drawPitch() {
+        ctx.fillStyle = "#1b5e20"; // Green Pitch
+        ctx.fillRect(0, 0, width, height);
+
+        ctx.strokeStyle = "white";
+        ctx.lineWidth = 3;
+
+        // Outline
+        ctx.strokeRect(50, 50, 700, 400);
+
+        // Center Circle
+        ctx.beginPath();
+        ctx.arc(width / 2, height / 2, 60, 0, Math.PI * 2);
+        ctx.stroke();
+
+        // Goals
+        ctx.strokeRect(50, 200, 30, 100);
+        ctx.strokeRect(720, 200, 30, 100);
+
+        // Penalty Boxes
+        ctx.strokeRect(50, 150, 100, 200);
+        ctx.strokeRect(650, 150, 100, 200);
+    }
+
+    function generateHeatmapData(position) {
+        let data = [];
+        let numPoints = 700;
+
+        for (let i = 0; i < numPoints; i++) {
+            let x, y;
+
+            if (position === "Goalkeeper") {
+                x = 100 + Math.random() * 50;
+                y = 200 + Math.random() * 100;
+            } else if (position === "Defender") {
+                x = 150 + Math.random() * 250;
+                y = 150 + Math.random() * 200;
+            } else if (position === "Midfielder") {
+                x = 250 + Math.random() * 300;
+                y = 120 + Math.random() * 260;
+            } else if (position === "Forward") {
+                x = 500 + Math.random() * 180;
+                y = 120 + Math.random() * 260;
+            } else {
+                x = Math.random() * width;
+                y = Math.random() * height;
+            }
+
+            data.push({ x, y });
+        }
+        return data;
+    }
+
+    function drawHeatmap(position) {
+        drawPitch(); // Clear the canvas and redraw the pitch
+
+        let data = generateHeatmapData(position);
+        let colorScale = d3.scaleSequential(d3.interpolateYlOrRd).domain([0, 30]); 
+
+        data.forEach(point => {
+            let intensity = Math.random() * 30;
+            let color = colorScale(intensity);
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.arc(point.x, point.y, 10, 0, Math.PI * 2);
+            ctx.fill();
+        });
+
+        // Apply Gaussian Blur Effect
+        ctx.globalAlpha = 0.6;
+        ctx.filter = "blur(12px)";
+        ctx.drawImage(canvas, 0, 0);
+        ctx.filter = "none";
+        ctx.globalAlpha = 1;
+    }
+
+    function updateHeatmap(position) {
+        drawHeatmap(position);
+    }
+
+    drawPitch();
+    drawHeatmap("Midfielder");  // Default Position
+</script>
+
+</body>
+</html>

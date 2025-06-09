@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select ISL Season - Drona AI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #102131;
+            --text-color: white;
+            --accent-color: #97badc;
+            --card-bg: #1a2b3c;
+            --neon-glow: #00ddeb;
+            --secondary-bg: #0a1a2a;
+        }
+
+        [data-theme="light"] {
+            --bg-color: #f0f0f0;
+            --text-color: black;
+            --accent-color: #2f4b7c;
+            --card-bg: #e0e0e0;
+            --neon-glow: #0066cc;
+            --secondary-bg: #d0d0d0;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Montserrat", sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .season-card {
+            background: var(--card-bg);
+            border: 1px solid var(--neon-glow);
+            border-radius: 12px;
+            padding: 2rem;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 0 20px rgba(0, 221, 235, 0.2);
+            text-align: center;
+        }
+
+        .season-card h1 {
+            color: var(--neon-glow);
+            text-shadow: 0 0 10px var(--neon-glow);
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+        }
+
+        .season-btn {
+            display: block;
+            width: 100%;
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            background: var(--secondary-bg);
+            color: var(--text-color);
+            border: 1px solid var(--accent-color);
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: background 0.3s ease, color 0.3s ease, transform 0.3s ease;
+        }
+
+        .season-btn:hover {
+            background: rgba(151, 186, 220, 0.1);
+            color: var(--neon-glow);
+            transform: scale(1.05);
+        }
+
+        .nav-buttons {
+            margin-top: 2rem;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .nav-btn {
+            padding: 0.75rem 1.5rem;
+            background: var(--secondary-bg);
+            color: var(--text-color);
+            border: 1px solid var(--accent-color);
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: rgba(151, 186, 220, 0.1);
+            color: var(--neon-glow);
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body data-theme="dark">
+    <div class="season-card">
+        <h1>Select ISL Season</h1>
+        {% for season in seasons %}
+            <a href="{{ url_for('isl_rank', position=position, season=season) }}" class="season-btn">{{ season }}</a>
+        {% endfor %}
+        <div class="nav-buttons">
+            <a href="{{ url_for('compare') }}" class="nav-btn">Compare Players</a>
+            <a href="{{ url_for('dashboard') }}" class="nav-btn">Back to Dashboard</a>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

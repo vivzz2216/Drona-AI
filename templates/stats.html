@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player Stats - Drona AI</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0d1b2a;
+            --text-color: #ffffff;
+            --accent-color: #1b98e0;
+            --card-bg: #13293d;
+            --neon-glow: #00ddeb;
+            --secondary-bg: #071a2f;
+            --highlight: #ff4d4d;
+        }
+
+        [data-theme="light"] {
+            --bg-color: #f4f7fa;
+            --text-color: #1a1a1a;
+            --accent-color: #2f4b7c;
+            --card-bg: #ffffff;
+            --neon-glow: #0066cc;
+            --secondary-bg: #e0e5eb;
+            --highlight: #ff4d4d;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Roboto", sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: var(--secondary-bg);
+            border-bottom: 2px solid var(--neon-glow);
+            box-shadow: 0 4px 12px rgba(0, 221, 235, 0.15);
+            padding: 1rem;
+        }
+
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--neon-glow);
+            text-shadow: 0 0 10px var(--neon-glow);
+        }
+
+        .navbar-nav .nav-link {
+            color: var(--text-color);
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: var(--neon-glow);
+            text-shadow: 0 0 5px var(--neon-glow);
+        }
+
+        .dropdown-menu {
+            background: var(--secondary-bg);
+            border: none;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+
+        .dropdown-item {
+            color: var(--text-color);
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-item:hover {
+            background: var(--accent-color);
+            color: #fff;
+        }
+
+        .theme-toggle {
+            cursor: pointer;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            color: var(--neon-glow);
+        }
+
+        .notification-icon {
+            font-size: 1.5rem;
+            color: var(--text-color);
+            position: relative;
+        }
+
+        .notification-icon::after {
+            content: "";
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            width: 8px;
+            height: 8px;
+            background: var(--highlight);
+            border-radius: 50%;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: var(--bg-color);
+            width: 70px;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 3rem;
+            border-right: 1px solid var(--accent-color);
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar i {
+            font-size: 1.6rem;
+            margin-bottom: 2.5rem;
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+
+        .sidebar i:hover {
+            color: var(--neon-glow);
+            transform: scale(1.15);
+        }
+
+        /* Main Content */
+        .center-area {
+            margin-left: 70px;
+            padding: 2rem;
+            overflow-y: auto;
+            height: 100vh;
+        }
+
+        .stats-section {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 0 25px rgba(0, 221, 235, 0.15);
+            border: 1px solid var(--neon-glow);
+        }
+
+        .stats-section h1 {
+            color: var(--neon-glow);
+            font-size: 2.2rem;
+            font-weight: 700;
+            text-shadow: 0 0 8px var(--neon-glow);
+            margin-bottom: 2rem;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .stats-card {
+            background: var(--secondary-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid var(--accent-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 221, 235, 0.2);
+        }
+
+        .stats-card h2 {
+            color: var(--neon-glow);
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+        }
+
+        .top-player {
+            text-align: center;
+        }
+
+        .top-player img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid var(--neon-glow);
+            margin-bottom: 1rem;
+            box-shadow: 0 0 15px rgba(0, 221, 235, 0.3);
+        }
+
+        .top-player .player-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--neon-glow);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .top-player .player-name:hover {
+            color: var(--highlight);
+            text-shadow: 0 0 8px var(--highlight);
+        }
+
+        .top-player .team-name {
+            font-size: 0.95rem;
+            color: var(--text-color);
+            opacity: 0.8;
+        }
+
+        .top-player .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--highlight);
+            margin-top: 0.5rem;
+        }
+
+        .other-players .player-row {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(151, 186, 220, 0.2);
+        }
+
+        .other-players .player-row:last-child {
+            border-bottom: none;
+        }
+
+        .other-players .rank {
+            width: 10%;
+            font-size: 0.95rem;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+
+        .other-players .player-info {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .other-players .player-name-link {
+            color: var(--neon-glow);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .other-players .player-name-link:hover {
+            color: var(--highlight);
+            text-shadow: 0 0 5px var(--highlight);
+        }
+
+        .other-players .stat-value {
+            width: 15%;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--highlight);
+            text-align: right;
+        }
+
+        .no-data {
+            color: var(--text-color);
+            font-style: italic;
+            text-align: center;
+            padding: 1rem;
+            opacity: 0.7;
+        }
+
+        @media (max-width: 768px) {
+            .center-area {
+                margin-left: 0;
+                padding: 1rem;
+            }
+
+            .sidebar {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body data-theme="dark">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <i class="bi bi-dribbble" title="Sports"></i>
+        <i class="bi bi-trophy-fill" title="Achievements"></i>
+        <i class="bi bi-person" title="Profiles"></i>
+        <i class="bi bi-chat-dots" title="Messages"></i>
+        <i class="bi bi-gear" title="Settings"></i>
+        <i class="bi bi-calendar" title="Schedule"></i>
+    </nav>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for('dashboard') }}">Drona AI</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">Filters</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ url_for('isl_rank', position='Goalkeeper') }}">By Goalkeeper</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('isl_rank', position='Defender') }}">By Defender</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('isl_rank', position='Forward') }}">By Forward</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('isl_rank', position='Midfielder') }}">By Midfielder</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('isl_analytics') }}">Analytics</a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('isl_stats') }}">Stats</a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center">
+                    <div class="theme-toggle" onclick="toggleTheme()">
+                        <i class="bi bi-moon"></i> Dark Mode
+                    </div>
+                    <i class="bi bi-bell notification-icon ms-3" title="Notifications"></i>
+                    <a class="nav-link ms-3" href="{{ url_for('logout') }}">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="center-area">
+        <div class="stats-section">
+            <h1>Player Stats Rankings</h1>
+            <div class="stats-container">
+                <!-- Goals -->
+                <div class="stats-card">
+                    <h2>Goals</h2>
+                    {% if goals_rank and goals_rank|length > 0 %}
+                    <div class="top-player">
+                        <img src="{{ url_for('static', filename=goals_rank[0].image_path) }}"
+                            alt="{{ goals_rank[0].name }}"
+                            onerror="this.src='{{ url_for('static', filename='images/players/placeholder.jpg') }}';">
+                        <a href="{{ url_for('player_profile', player_name=goals_rank[0].name) }}" class="player-name">
+                            {{ goals_rank[0].name }}
+                        </a>
+                        <div class="team-name">{{ goals_rank[0].team_name }}</div>
+                        <div class="stat-value">{{ goals_rank[0].stat_value }}</div>
+                    </div>
+                    {% if goals_rank|length > 1 %}
+                    <div class="other-players">
+                        {% for player in goals_rank[1:] %}
+                        <div class="player-row">
+                            <div class="rank">{{ loop.index + 1 }}</div>
+                            <div class="player-info">
+                                <a href="{{ url_for('player_profile', player_name=player.name) }}"
+                                    class="player-name-link">
+                                    {{ player.name }}
+                                </a>
+                            </div>
+                            <div class="stat-value">{{ player.stat_value }}</div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    {% else %}
+                    <p class="no-data">No data available.</p>
+                    {% endif %}
+                </div>
+
+                <!-- Assists -->
+                <div class="stats-card">
+                    <h2>Assists</h2>
+                    {% if assists_rank and assists_rank|length > 0 %}
+                    <div class="top-player">
+                        <img src="{{ url_for('static', filename=assists_rank[0].image_path) }}"
+                            alt="{{ assists_rank[0].name }}"
+                            onerror="this.src='{{ url_for('static', filename='images/players/placeholder.jpg') }}';">
+                        <a href="{{ url_for('player_profile', player_name=assists_rank[0].name) }}" class="player-name">
+                            {{ assists_rank[0].name }}
+                        </a>
+                        <div class="team-name">{{ assists_rank[0].team_name }}</div>
+                        <div class="stat-value">{{ assists_rank[0].stat_value }}</div>
+                    </div>
+                    {% if assists_rank|length > 1 %}
+                    <div class="other-players">
+                        {% for player in assists_rank[1:] %}
+                        <div class="player-row">
+                            <div class="rank">{{ loop.index + 1 }}</div>
+                            <div class="player-info">
+                                <a href="{{ url_for('player_profile', player_name=player.name) }}"
+                                    class="player-name-link">
+                                    {{ player.name }}
+                                </a>
+                            </div>
+                            <div class="stat-value">{{ player.stat_value }}</div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    {% else %}
+                    <p class="no-data">No data available.</p>
+                    {% endif %}
+                </div>
+
+                <!-- Passes -->
+                <div class="stats-card">
+                    <h2>Passes</h2>
+                    {% if passes_rank and passes_rank|length > 0 %}
+                    <div class="top-player">
+                        <img src="{{ url_for('static', filename=passes_rank[0].image_path) }}"
+                            alt="{{ passes_rank[0].name }}"
+                            onerror="this.src='{{ url_for('static', filename='images/players/placeholder.jpg') }}';">
+                        <a href="{{ url_for('player_profile', player_name=passes_rank[0].name) }}" class="player-name">
+                            {{ passes_rank[0].name }}
+                        </a>
+                        <div class="team-name">{{ passes_rank[0].team_name }}</div>
+                        <div class="stat-value">{{ passes_rank[0].stat_value }}</div>
+                    </div>
+                    {% if passes_rank|length > 1 %}
+                    <div class="other-players">
+                        {% for player in passes_rank[1:] %}
+                        <div class="player-row">
+                            <div class="rank">{{ loop.index + 1 }}</div>
+                            <div class="player-info">
+                                <a href="{{ url_for('player_profile', player_name=player.name) }}"
+                                    class="player-name-link">
+                                    {{ player.name }}
+                                </a>
+                            </div>
+                            <div class="stat-value">{{ player.stat_value }}</div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    {% else %}
+                    <p class="no-data">No data available.</p>
+                    {% endif %}
+                </div>
+
+                <!-- Saves -->
+                <div class="stats-card">
+                    <h2>Most Saves</h2>
+                    {% if saves_rank and saves_rank|length > 0 %}
+                    <div class="top-player">
+                        <img src="{{ url_for('static', filename=saves_rank[0].image_path) }}"
+                            alt="{{ saves_rank[0].name }}"
+                            onerror="this.src='{{ url_for('static', filename='images/players/placeholder.jpg') }}';">
+                        <a href="{{ url_for('player_profile', player_name=saves_rank[0].name) }}" class="player-name">
+                            {{ saves_rank[0].name }}
+                        </a>
+                        <div class="team-name">{{ saves_rank[0].team_name }}</div>
+                        <div class="stat-value">{{ saves_rank[0].stat_value }}</div>
+                    </div>
+                    {% if saves_rank|length > 1 %}
+                    <div class="other-players">
+                        {% for player in saves_rank[1:] %}
+                        <div class="player-row">
+                            <div class="rank">{{ loop.index + 1 }}</div>
+                            <div class="player-info">
+                                <a href="{{ url_for('player_profile', player_name=player.name) }}"
+                                    class="player-name-link">
+                                    {{ player.name }}
+                                </a>
+                            </div>
+                            <div class="stat-value">{{ player.stat_value }}</div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    {% else %}
+                    <p class="no-data">No data available.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function toggleTheme() {
+            const body = document.body;
+            const currentTheme = body.getAttribute("data-theme");
+            const newTheme = currentTheme === "dark" ? "light" : "dark";
+            body.setAttribute("data-theme", newTheme);
+            document.querySelector(".theme-toggle").innerHTML =
+                newTheme === "dark"
+                    ? '<i class="bi bi-moon"></i> Dark Mode'
+                    : '<i class="bi bi-sun"></i> Light Mode';
+            localStorage.setItem("theme", newTheme);
+        }
+
+        const savedTheme = localStorage.getItem("theme") || "dark";
+        document.body.setAttribute("data-theme", savedTheme);
+        document.querySelector(".theme-toggle").innerHTML =
+            savedTheme === "dark"
+                ? '<i class="bi bi-moon"></i> Dark Mode'
+                : '<i class="bi bi-sun"></i> Light Mode';
+    </script>
+</body>
+
+</html>

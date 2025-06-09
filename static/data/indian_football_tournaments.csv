@@ -1,0 +1,15 @@
+indian_football_tournaments = [
+    {"Tournament": "Indian Super League (ISL)", "Level": "National", "Logo": "static/images/isl_logo.png"},
+    {"Tournament": "I-League", "Level": "National", "Logo": "static/images/ileague_logo.png"},
+    {"Tournament": "Super Cup", "Level": "National", "Logo": "static/images/super_cup_logo.png"},
+    {"Tournament": "Santosh Trophy", "Level": "National", "Logo": "static/images/santosh_trophy_logo.png"},
+    {"Tournament": "Durand Cup", "Level": "National", "Logo": "static/images/durand_cup_logo.png"},
+    {"Tournament": "Federation Cup", "Level": "National", "Logo": "static/images/federation_cup_logo.png"},
+    {"Tournament": "I-League 2nd Division", "Level": "Regional", "Logo": "static/images/ileague_2nd_logo.png"},
+    {"Tournament": "Calcutta Football League (CFL)", "Level": "Regional", "Logo": "static/images/cfl_logo.png"},
+    {"Tournament": "Mizoram Premier League (MPL)", "Level": "Regional", "Logo": "static/images/mpl_logo.png"},
+    {"Tournament": "Goa Professional League", "Level": "Regional", "Logo": "static/images/goa_league_logo.png"},
+    {"Tournament": "Subroto Cup", "Level": "Youth", "Logo": "static/images/subroto_cup_logo.png"},
+    {"Tournament": "Junior National Championships", "Level": "Youth", "Logo": "static/images/junior_national_logo.png"},
+    {"Tournament": "Sub-Junior National Championships", "Level": "Youth", "Logo": "static/images/sub_junior_national_logo.png"},
+]
